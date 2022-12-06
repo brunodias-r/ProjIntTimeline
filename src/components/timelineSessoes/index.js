@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
@@ -47,27 +47,36 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 //   </View>
 // };
 
-// export default function TimelineSessoes() {
-//   <View style={styles.container}>
-//     <View style={styles.timeline}>
-//       <View style={styles.parte1}>
-//         <View style={styles.circulo} />
-//         <View style={styles.linha}></View>
-//       </View>
-//       <View style={styles.badge}>
-//         <Image source={require('../assets/images/badge.png')} style={{ width: 22, height: 25 }}></Image>
-//       </View>
-//       <View style={styles.parte2}>
-//         <TouchableOpacity>
-//           <Text style={styles.titulo}>{item.unidadeCurricular.nome}</Text>
-//         </TouchableOpacity>
-//         <Text style={styles.descricao}>Descrição: {item.descricao}</Text>
-//         <Text style={styles.data}>Código: {item.unidadeCurricular.codigo}</Text>
-//         <Text style={styles.data}>Carga horária: {item.unidadeCurricular.horas}</Text> 
-//       </View>
-//     </View>
-//   </View>
-// };
+export default function TimelineSessoes({data}) {
+
+  const [imagem, setImagem] = useState(require('../../assets/images/relogio.png'));
+
+  function trocarImagem() {
+    setImagem(require('../../assets/images/verifica.png'))
+  }
+
+  <View style={styles.container}>
+    <View style={styles.timeline}>
+      <View style={styles.parte1}>
+        <View style={styles.circulo}>
+          <Image source={imagem} style={{ width: 19, height: 19 }} />
+        </View>
+        <View style={styles.linha}></View>
+      </View>
+      <View style={styles.badge}>
+        <Image source={require('../../assets/images/images.jpg')} style={{ width: 22, height: 25 }}></Image>
+      </View>
+      <View style={styles.parte2}>
+        <TouchableOpacity onPress={trocarImagem}>
+          <Text style={styles.titulo}>{data.horaInicio}</Text>
+          <Text style={styles.data}>Local: {data.local}</Text>
+          <Text style={styles.descricao}>Semana: {data.semana}</Text>
+          <Text style={styles.descricao}>Descrição do Encontro: {data.encontroTipo.descricao}</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </View>
+};
 
 const styles = StyleSheet.create({
   container: {

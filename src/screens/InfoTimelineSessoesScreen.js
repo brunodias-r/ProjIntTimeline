@@ -1,36 +1,48 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, FlatList } from 'react-native';
+import Encontro from '../components/encontro/index.js';
 
 export default function InfoTimelineSessoesScreen({ route }) {
-    
-    // console.warn({route})
-    const data = route.params;
-    // const { dia, situacao, descricao, objetos, titulo } = route.params;
 
-    return (
+    const { dataObj, dataSit } = route.params;
+
+    const renderItem = ({ item }) => (
         <View style={styles.container}>
             <View style={styles.timeline}>
                 <View style={styles.badge}>
-                    {/* <Text style={styles.titulo}>{this.props.data.id}</Text> */}
                     <Image source={require('../assets/images/images.jpg')} style={{ width: 22, height: 25 }}></Image>
                 </View>
                 <View style={styles.parte2}>
-                    <Text style={styles.titulo}>Dia: {JSON.stringify(data.dia)}</Text>
-                    <Text style={styles.descricao}>Título: {JSON.stringify(data.titulo)}</Text>
-                    <Text style={styles.descricao}>Situação: {JSON.stringify(data.situacao)}</Text>
-                    <Text style={styles.data}>Descrição: {JSON.stringify(data.descricao)}</Text>
-                    <Text style={styles.data}>Objetos: {JSON.stringify(data.objetos)}</Text> 
-                </View> 
-                {/* <View style={styles.parte2}>
-                    <Text style={styles.titulo}>Dia: {data.dia}</Text>
-                    <Text style={styles.data}>Título: {data.titulo}</Text>
-                    <Text style={styles.descricao}>Situação: {data.situacao}</Text>
-                    <Text style={styles.data}>Descrição: {data.descricao}</Text>
-                    <Text style={styles.data}>Objetos: {data.objetos}</Text> 
-                </View> */}
+                    <Text style={styles.descricao}>{item.grauDificuldade.descricao}</Text>
+                    <Text style={styles.descricao}>{item.descricao}</Text>
+                </View>
             </View>
         </View>
     )
+
+    // const renderItem = () => (
+    //     <View style={styles.container}>
+    //         <View style={styles.timeline}>
+    //             <View style={styles.badge}>
+    //                 <Image source={require('../assets/images/images.jpg')} style={{ width: 22, height: 25 }}></Image>
+    //             </View>
+    //             <View style={styles.parte2}>
+    //                 <Text style={styles.descricao}>{route.grauDificuldade.descricao}</Text>
+    //                 <Text style={styles.descricao}>{route.descricao}</Text>
+    //             </View>
+    //         </View>
+    //     </View>
+    // )
+
+
+    return (
+        <SafeAreaView>
+            <FlatList
+                data={dataObj}
+                renderItem={renderItem}
+            />
+        </SafeAreaView>
+    );
 };
 
 const styles = StyleSheet.create({

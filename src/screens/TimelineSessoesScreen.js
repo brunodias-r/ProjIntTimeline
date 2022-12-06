@@ -1,88 +1,87 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, Text, FlatList, StyleSheet, Image, View, TouchableOpacity } from "react-native";
-import data from '../models/SituacaoAprendizagem.js'
+// import data from '../models/SituacaoAprendizagem.js'
+import Encontro from '../components/encontro/index.js'
+import ObjetoAprendizagem from '../components/objetoAprendizagem/index.js'
 
-export default function TimelineSessoesScreen({ navigation }) {
-
-  // const [data, setData] = useState([]);
-
-  // const fetchData = async () => {
-  //   const resp = await fetch("http://academico3.rj.senac.br:8080/api/Competencia");
-  //   const data = await resp.json();
-  //   setData(data);
-  // };
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
-  // const renderItem =
-  //   ({ item }) => (
-  //     <View>
-  //       <View style={styles.timeline}>
-  //         <View style={styles.parte1}>
-  //           <View style={styles.circulo} />
-  //           <View style={styles.linha}></View>
-  //         </View>
-  //         <View style={styles.badge}>
-  //           <Image source={require('../assets/images/images.jpg')} style={{ width: 22, height: 25 }}></Image>
-  //         </View>
-  //         <View style={styles.parte2}>
-  //           <TouchableOpacity 
-  //           onPress={navigation.navigate('Informações', {data})}
-  //           >
-  //             <Text style={styles.titulo}>{item.unidadeCurricular.nome}</Text>
-  //           </TouchableOpacity>
-  //           <Text style={styles.descricao}>Descrição: {item.descricao}</Text>
-  //           <Text style={styles.data}>Código: {item.unidadeCurricular.codigo}</Text>
-  //           <Text style={styles.data}>Carga horária: {item.unidadeCurricular.horas}</Text>
-  //         </View>
-  //       </View>
-  //     </View>
-  //   );
+export default function TimelineSessoesScreen({navigation}) {
 
   const [imagem, setImagem] = useState(require('../assets/images/relogio.png'));
+  const [dataEnc, setDataEnc] = useState([]);
+  const [dataObj, setDataObj] = useState([]);
+  const [dataSit, setDataSit] = useState([]);
 
-  // console.warn({route})
-  function openScreen() {
-    // navigation.navigate('Informações', { dia: data.dia, titulo: data.titulo, situacao: data.situacao, descricao: data.descricao })
-    navigation.navigate('Informações', data)
+  const fetchDataEnc = async () => {
+    const resp = await fetch("http://academico3.rj.senac.br:8080/api/Encontro");
+    const dataEnc = await resp.json();
+    setDataEnc(dataEnc);
+    console.log(dataEnc)
+  };
+
+  const fetchDataObj = async () => {
+    const resp = await fetch("http://academico3.rj.senac.br:8080/api/ObjetoAprendizagem");
+    const dataObj = await resp.json();
+    setDataObj(dataObj);
+    console.log(dataObj)
+  };
+
+  const fetchDataSit = async () => {
+    const resp = await fetch("http://academico3.rj.senac.br:8080/api/SituacaoAprendizagem");
+    const dataSit = await resp.json();
+    setDataSit(dataSit);
+    console.log(dataSit)
+  };
+
+  useEffect(() => {
+    fetchDataEnc();
+    fetchDataObj();
+    fetchDataSit();
+  }, []);
+
+
+
+
+  // function openScreen() {
+  //   // navigation.navigate('Informações', { dia: data.dia, titulo: data.titulo, situacao: data.situacao, descricao: data.descricao })
+  //   navigation.navigate('Informações', data, dataObj)
+  // }
+  const openScreen = () => {
+    navigation.navigate('Informações', {dataObj},{dataSit})
   }
 
   function trocarImagem() {
     setImagem(require('../assets/images/verifica.png'))
   }
 
-  const renderItem =
-    ({ item }) => (
-      <View style={styles.container}>
-        <View style={styles.timeline}>
-          <View style={styles.parte1}>
-            <View style={styles.circulo}>
-              <Image source={imagem} style={{ width: 19, height: 19 }} />
-            </View>
-            <View style={styles.linha}></View>
+  const renderItem = ({ item, index }) => (
+    <View style={styles.container}>
+      <View style={styles.timeline}>
+        <View style={styles.parte1}>
+          <View style={styles.circulo}>
+            <Image source={imagem} style={{ width: 19, height: 19 }} />
           </View>
-          <View style={styles.badge}>
-            <Image source={require('../assets/images/images.jpg')} style={{ width: 22, height: 25 }}></Image>
-          </View>
-          <View style={styles.parte2}>
-            <TouchableOpacity onSele onPress={openScreen} onPressOut={trocarImagem}>
-              <Text style={styles.titulo}>{item.dia}</Text>
-              <Text style={styles.data}>{item.situacao}</Text>
-              <Text style={styles.descricao}>Título: {item.titulo}</Text>
-              <Text style={styles.descricao}>Descrição: {item.descricao}</Text>
-            </TouchableOpacity>
-          </View>
+          <View style={styles.linha}></View>
+        </View>
+        <View style={styles.badge}>
+          <Image source={require('../assets/images/images.jpg')} style={{ width: 22, height: 25 }}></Image>
+        </View>
+        <View style={styles.parte2}>
+          <Text style={styles.descricao}>{item.horaInicio}</Text>
+          <Text style={styles.titulo}>Local: {item.local}</Text>
+          <Text style={styles.descricao}>Ambiente: {item.encontroTipo.descricao}</Text>
+          <TouchableOpacity style={styles.button} onPress={openScreen} onPressOut={trocarImagem}>
+            <Text style={styles.detalhes}>Detalhes</Text>
+          </TouchableOpacity>
         </View>
       </View>
-    );
+    </View>
+  );
 
   return (
     <SafeAreaView>
       <FlatList
-        data={data}
-        keyExtractor={item => item.id}
+        data={dataEnc}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
       />
     </SafeAreaView>
@@ -157,4 +156,19 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#656565',
   },
+  button:{
+    backgroundColor: '#F78B1F',
+    width: '25%',
+    height: '20%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 3,
+    padding: 8,
+  },
+  detalhes:{
+    color: 'white',
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });

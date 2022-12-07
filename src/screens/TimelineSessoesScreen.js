@@ -9,7 +9,6 @@ export default function TimelineSessoesScreen({navigation}) {
   const [imagem, setImagem] = useState(require('../assets/images/relogio.png'));
   const [dataEnc, setDataEnc] = useState([]);
   const [dataObj, setDataObj] = useState([]);
-  const [dataSit, setDataSit] = useState([]);
 
   const fetchDataEnc = async () => {
     const resp = await fetch("http://academico3.rj.senac.br:8080/api/Encontro");
@@ -25,35 +24,26 @@ export default function TimelineSessoesScreen({navigation}) {
     console.log(dataObj)
   };
 
-  const fetchDataSit = async () => {
-    const resp = await fetch("http://academico3.rj.senac.br:8080/api/SituacaoAprendizagem");
-    const dataSit = await resp.json();
-    setDataSit(dataSit);
-    console.log(dataSit)
-  };
-
   useEffect(() => {
     fetchDataEnc();
     fetchDataObj();
-    fetchDataSit();
   }, []);
-
-
-
 
   // function openScreen() {
   //   // navigation.navigate('Informações', { dia: data.dia, titulo: data.titulo, situacao: data.situacao, descricao: data.descricao })
   //   navigation.navigate('Informações', data, dataObj)
   // }
+
   const openScreen = () => {
-    navigation.navigate('Informações', {dataObj},{dataSit})
+    // navigation.navigate('Informações', {dataObj},{dataSit})
+    navigation.navigate('Informações', {dataObj})
   }
 
   function trocarImagem() {
     setImagem(require('../assets/images/verifica.png'))
   }
 
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({ item }) => (
     <View style={styles.container}>
       <View style={styles.timeline}>
         <View style={styles.parte1}>
@@ -66,9 +56,8 @@ export default function TimelineSessoesScreen({navigation}) {
           <Image source={require('../assets/images/images.jpg')} style={{ width: 22, height: 25 }}></Image>
         </View>
         <View style={styles.parte2}>
-          <Text style={styles.descricao}>{item.horaInicio}</Text>
-          <Text style={styles.titulo}>Local: {item.local}</Text>
-          <Text style={styles.descricao}>Ambiente: {item.encontroTipo.descricao}</Text>
+          <Text style={styles.titulo}>{item.horaInicio}</Text>
+          <Text style={styles.titulo}>Descrição: {item.descricao}</Text>
           <TouchableOpacity style={styles.button} onPress={openScreen} onPressOut={trocarImagem}>
             <Text style={styles.detalhes}>Detalhes</Text>
           </TouchableOpacity>
@@ -81,6 +70,7 @@ export default function TimelineSessoesScreen({navigation}) {
     <SafeAreaView>
       <FlatList
         data={dataEnc}
+        extraData={dataObj}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
       />
@@ -163,7 +153,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 3,
-    padding: 8,
+    padding: '5%',
   },
   detalhes:{
     color: 'white',

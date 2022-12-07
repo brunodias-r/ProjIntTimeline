@@ -1,20 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Image, SafeAreaView, FlatList } from 'react-native';
-import Encontro from '../components/encontro/index.js';
+import ObjetoAprendizagem from "../components/objetoAprendizagem";
+// import Encontro from '../components/encontro/index.js';
 
 export default function InfoTimelineSessoesScreen({ route }) {
 
-    const { dataObj, dataSit } = route.params;
+    const { dataObj } = route.params;
+    const [dataSit, setDataSit] = useState([]);
 
-    const renderItem = ({ item }) => (
+    const fetchDataSit = async () => {
+        const resp = await fetch("http://academico3.rj.senac.br:8080/api/SituacaoAprendizagem");
+        const dataSit = await resp.json();
+        setDataSit(dataSit);
+        console.log(dataSit)
+    };
+    useEffect(() => {
+        fetchDataSit();
+    }, []);
+
+    const renderItemObj = ({ item }) => (
         <View style={styles.container}>
             <View style={styles.timeline}>
-                <View style={styles.badge}>
+                {/* <View style={styles.badge}>
                     <Image source={require('../assets/images/images.jpg')} style={{ width: 22, height: 25 }}></Image>
-                </View>
+                </View> */}
                 <View style={styles.parte2}>
-                    <Text style={styles.descricao}>{item.grauDificuldade.descricao}</Text>
+                    {/* <Text style={styles.descricao}>ID: {item.id}</Text> */}
+                    {/* <Text style={styles.descricao}>{item.grauDificuldade.descricao}</Text> */}
                     <Text style={styles.descricao}>{item.descricao}</Text>
+                </View>
+            </View>
+        </View>
+    )
+
+
+    const renderItemSit = ({ item }) => (
+        <View style={styles.container}>
+            <View style={styles.timeline}>
+                {/* <View style={styles.badge}>
+                    <Image source={require('../assets/images/images.jpg')} style={{ width: 22, height: 25 }}></Image>
+                </View> */}
+                <View style={styles.parte2}>
+                    {/* <Text style={styles.descricao}>ID: {item.id}</Text> */}
+                    <Text style={styles.titulo}>{item.titulo}</Text>
+                    <Text style={styles.descricao}>{item.descricao}</Text>
+                    {/* <Text style={styles.descricao}>{item.grauDificuldade.descricao}</Text> */}
                 </View>
             </View>
         </View>
@@ -38,8 +68,14 @@ export default function InfoTimelineSessoesScreen({ route }) {
     return (
         <SafeAreaView>
             <FlatList
+                data={dataSit}
+                keyExtractor={(item) => item.id}
+                renderItem={renderItemSit}
+            />
+            <FlatList
                 data={dataObj}
-                renderItem={renderItem}
+                keyExtractor={(item) => item.id}
+                renderItem={renderItemObj}
             />
         </SafeAreaView>
     );

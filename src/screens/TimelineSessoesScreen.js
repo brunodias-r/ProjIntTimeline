@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, Text, FlatList, StyleSheet, Image, View, TouchableOpacity } from "react-native";
-// import data from '../models/SituacaoAprendizagem.js'
+import { SafeAreaView, ScrollView, Text, FlatList, StyleSheet, Image, View, TouchableOpacity } from "react-native";
+import data from '../models/SituacaoAprendizagem.js'
 import Encontro from '../components/encontro/index.js'
 import ObjetoAprendizagem from '../components/objetoAprendizagem/index.js'
 
@@ -55,6 +55,14 @@ export default function TimelineSessoesScreen({navigation}) {
         <View style={styles.badge}>
           <Image source={require('../assets/images/images.jpg')} style={{ width: 22, height: 25 }}></Image>
         </View>
+        {/* <View style={styles.parte2}>
+          <Text style={styles.titulo}>{item.dia}</Text>
+          <Text style={styles.titulo}>{item.titulo}</Text>
+          <Text style={styles.descricao}>Descrição: {item.descricao}</Text>
+          <TouchableOpacity style={styles.button} onPress={openScreen} onPressOut={trocarImagem}>
+            <Text style={styles.detalhes}>Detalhes</Text>
+          </TouchableOpacity>
+        </View> */}
         <View style={styles.parte2}>
           <Text style={styles.titulo}>{item.horaInicio}</Text>
           <Text style={styles.titulo}>Descrição: {item.descricao}</Text>
@@ -96,7 +104,7 @@ const styles = StyleSheet.create({
   tituloTimeline: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 15,
+    marginBottom: 0,
     justifyContent: 'center'
   },
   parte1: {
@@ -113,7 +121,7 @@ const styles = StyleSheet.create({
   },
   linha: {
     backgroundColor: '#C5C5C5',
-    height: '100%',
+    height: '400%',
     width: 2,
     justifyContent: 'center',
 
@@ -121,6 +129,7 @@ const styles = StyleSheet.create({
   parte2: {
     flex: 7,
     padding: 5,
+    paddingBottom: 0,
     paddingTop: 0,
     // backgroundColor: '#C5C5C5',
     borderRadius: 10,
@@ -153,7 +162,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 3,
-    padding: '5%',
+    padding: 10,
+    paddingBottom: 10,
+    paddingTop: 10,
   },
   detalhes:{
     color: 'white',

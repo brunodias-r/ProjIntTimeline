@@ -72,11 +72,11 @@ export default function InfoTimelineSessoesScreen({ route }) {
                 keyExtractor={(item) => item.id}
                 renderItem={renderItemSit}
             />
-            <FlatList
+            {/* <FlatList
                 data={dataObj}
                 keyExtractor={(item) => item.id}
                 renderItem={renderItemObj}
-            />
+            /> */}
         </SafeAreaView>
     );
 };
